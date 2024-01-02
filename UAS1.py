@@ -34,17 +34,16 @@ def bubble_sort(data, key=lambda x: x):
 
 def laporan():
     print('\n=== Laporan Tiket ===')
-    
-    # Menggunakan bubble_sort untuk mengurutkan dataTiket berdasarkan nama pelanggan
-    bubble_sort(dataTiket, key=lambda x: x[0].lower())
 
-    for tiket in dataTiket:
-        print(f"Nama Pelanggan: {tiket[0]}")
-        print(f"Jumlah Tiket: {tiket[1]}")
-        print(f"Tujuan: {tiket[2]}")
-        print(f"Harga: Rp. {tiket[3] * tiket[1]}")
-        print(f"Metode Pembayaran : {tiket[4]}")
-        print('-' * 30)
+    data_ketersedian_tiket = pd.read_csv('pemesanan.csv')
+    data_tiket = data_ketersedian_tiket.values.tolist()
+
+    bubble_sort(data_tiket, key=lambda x: x[0].lower())
+
+    columns = ['Nama Pelanggan', 'Jumlah Tiket', 'Tujuan', 'Harga', 'Metode Pembayaran']
+    data_spesifik = pd.DataFrame(data_tiket, columns=columns)
+
+    print(data_spesifik)
 
 def pembayaran():
     print()
@@ -98,7 +97,6 @@ def pesan_tiket():
     print("\nDaftar Tujuan:")
     for i, (tujuan, harga) in enumerate(hargaTiket.items(), start=1):
         print(f"{i}. {tujuan} - Rp. {harga}")
-
     
 
     # Pilih tujuan berdasarkan choice
@@ -149,16 +147,30 @@ def pesan_tiket():
 
     print(f"\nTiket berhasil dibuat. Tujuan: {tujuan}, Harga: Rp. {harga * jumlahTiket}")
     
- # Menyimpan data tiket ke file CSV
-    with open('pemesanan.csv', 'a', newline='') as csv_file:
-        data_writer = csv.writer(csv_file, delimiter=',')
-            # Menambahkan header jika file CSV masih kosong
-        if csv_file.tell() == 0:
-            header = ['Nama Pelanggan', 'Jumlah Tiket', 'Tujuan', 'Harga', 'Metode Pembayaran']
-            data_writer.writerow(header)
-            
-        for tiket in dataTiket:
-            data_writer.writerow(tiket)
+    data_tiket = pd.DataFrame(dataTiket, columns=['Nama Pelanggan', 'Jumlah Tiket', 'Tujuan', 'Harga', 'Metode Pembayaran'])
+
+    # Menyimpan DataFrame ke file CSV
+    data_tiket.to_csv('pemesanan.csv', mode='w', index=False)
+
+def create_specific_etiket(nama_pelanggan):
+    # Membaca data tiket dari file CSV
+    data_tiket = pd.read_csv('pemesanan.csv')
+    
+    # Memilih data tiket yang sesuai dengan nama pelanggan
+    tiket_pelanggan = data_tiket[data_tiket['Nama Pelanggan'].str.lower() == nama_pelanggan.lower()]
+    
+    # Memeriksa apakah data tiket pelanggan ditemukan
+    if tiket_pelanggan.empty:
+        print('\n')
+        print("Pelanggan tidak ditemukan.")
+        
+    else:
+        # Menyimpan data tiket pelanggan ke file CSV baru dengan nama sesuai nama pelanggan
+        nama_file_csv = f"{nama_pelanggan.lower()}_etiket.csv"
+        tiket_pelanggan.to_csv(nama_file_csv, index=False)
+        print('\n')
+        print("E-tiket dicetak")
+        print(f"File CSV: {nama_file_csv}")
 
 # Menu
 while True:
@@ -167,6 +179,7 @@ while True:
     print('2. Cek Status Tiket')
     print('3. Laporan Stasiun')
     print('4. Logout')
+    print('5. e tiket')
 
     choice = int(input('Silakan masukkan pilihan anda: '))
 
@@ -176,6 +189,9 @@ while True:
         cekTiket()
     elif choice == 3:
         laporan()
+    elif choice == 5:
+        namaTiket = input('Masukkan nama tiket yang ingin di cetak: ')
+        create_specific_etiket(namaTiket)
     elif choice == 4:
         print('=== Terimakasih Selamat Jalan ===')
         
