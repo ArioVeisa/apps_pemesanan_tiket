@@ -1,5 +1,6 @@
 # import csv
 import pandas as pd
+from termcolor import colored
 
 data_ketersedian_tiket = pd.read_csv('pemesanan.csv')
 
@@ -177,13 +178,25 @@ def create_specific_etiket(nama_pelanggan):
         print(f"File CSV: {nama_file_csv}")
 
 # Menu
+
+# text = colored('Hello, World!', 'red', attrs=['bold', 'dark'])
+# print(text)
+
 while True:
-    print('\n=== Selamat datang di stasiun Surabaya ===')
-    print('1. Pesan Tiket')
-    print('2. Cek Status Tiket')
-    print('3. Laporan Stasiun')
-    print('4. Logout')
-    print('5. e tiket')
+    welcome = colored('\n=== Selamat datang di stasiun Surabaya ===', 'yellow', attrs=['bold'])
+    print(welcome)
+    pesantiket = colored('1. Pesan Tiket', 'light_red')
+    print(pesantiket)
+    cekstatus = colored('2. Cek Status Tiket', 'light_blue')
+    print(cekstatus)
+    laporanstasiun = colored('3. Laporan Stasiun', 'light_yellow')
+    print(laporanstasiun)
+    etiket = colored('4. e tiket', 'light_magenta')
+    print(etiket)
+    keluar = colored('5. logout', 'light_cyan')
+    print(keluar)
+    
+    print('\n')
 
     choice = int(input('Silakan masukkan pilihan anda: '))
 
@@ -193,10 +206,10 @@ while True:
         cekTiket()
     elif choice == 3:
         laporan()
-    elif choice == 5:
+    elif choice == 4:
         namaTiket = input('Masukkan nama tiket yang ingin di cetak: ')
         create_specific_etiket(namaTiket)
-    elif choice == 4:
+    elif choice == 5:
         print('=== Terimakasih Selamat Jalan ===')
         
         break
