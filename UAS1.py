@@ -1,12 +1,12 @@
-import csv
+# import csv
 import pandas as pd
 
 data_ketersedian_tiket = pd.read_csv('pemesanan.csv')
 
 
 
-with open('pemesanan.csv', 'a', newline='') as csv_file:
-        data_writer = csv.writer(csv_file, delimiter=',')
+# with open('pemesanan.csv', 'a', newline='') as csv_file:
+#         data_writer = csv.writer(csv_file, delimiter=',')
 
 # Inisialisasi dataTiket sebagai list kosong
 dataTiket = []
@@ -19,11 +19,15 @@ hargaTiket = {
 
 def cekTiket():
     cekPelanggan = input('Masukkan Nama anda: ').lower()
-    for tiket in dataTiket:
-        if cekPelanggan == tiket[0]:
-            print('Tiket anda terdaftar')
-            return
-    print('Tiket anda tidak terdaftar. Mohon pesan tiket terlebih dahulu.')
+    
+    dataTiket = pd.read_csv('pemesanan.csv')
+    
+    if cekPelanggan in dataTiket['Nama Pelanggan'].str.lower().values:
+        print('\n')
+        print('Tiket anda terdaftar')
+    else:
+        print('\n')
+        print('Tiket anda tidak terdaftar. Mohon pesan tiket terlebih dahulu.')
 
 def bubble_sort(data, key=lambda x: x):
     n = len(data)
